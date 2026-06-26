@@ -1,0 +1,17 @@
+numpy
+pandas
+
+# Face Recognition
+scikit-learn
+dlib-bin # Detect Face Vectors
+
+git+https://github.com/ageitgey/face_recognition_models
+setuptools
+
+supabase # Database
+bcrypt # Encrypt Passwords
+
+segno # To make QR code image
+pillow # Image Transformations in Python
+
+streamlit # To make frontend
