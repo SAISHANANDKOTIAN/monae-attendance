@@ -15,3 +15,6 @@ segno # To make QR code image
 pillow # Image Transformations in Python
 
 streamlit # To make frontend
+
+librosa #to edit voices
+resemblyzer #to create voice embeddings
