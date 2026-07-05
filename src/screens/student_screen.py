@@ -19,7 +19,10 @@ def student_dashboard():
     with c1:
         header_dashboard()
     with c2:
-        st.subheader(f"""Welcome, {student_data['name']} """)
+        st.markdown(
+            f"<h3 style='color:black; margin:0;'>Welcome, {student_data['name']}</h3>",
+            unsafe_allow_html=True
+        )
         if st.button("Logout", type='secondary', key='loginbackbtn', shortcut="control+backspace"):
             st.session_state['is_logged_in'] = False
             del st.session_state.student_data 
@@ -30,7 +33,10 @@ def student_dashboard():
 
     c1, c2 =st.columns(2)
     with c1:
-        st.header('Your Enrolled Subjects')
+        st.markdown(
+            "<h2 style='color:#2d3044; margin-top:-20px'>Your Enrolled Subjects</h2>",
+            unsafe_allow_html=True
+        )
     with c2:
         if st.button('Enroll in Subject', type='primary', width='stretch'):
             enroll_dialog()
@@ -65,7 +71,7 @@ def student_dashboard():
 
         stats = stats_map.get(sid,{"total":0, "attended": 0} )
         def unenroll_button():
-                if st.button("Unenroll from tihs course", type='tertiary', width='stretch', icon=':material/delete_forever:'):
+                if st.button("Unenroll from tihs course", type='tertiary', width='stretch', icon=':material/delete_forever:', key=f"unenroll_{sid}"):
                     unenroll_student_to_subjects(student_id, sid)
                     st.toast(f"Unenrolled from {sub['name']} successfully!")
                     st.rerun()
@@ -104,7 +110,8 @@ def student_screen():
     st.space()
 
     show_registration = False
-    photo_source = st.camera_input("Position your face in the center")
+    st.markdown("<p style='color:black; margin-bottom:4px;'>Position your face in the center</p>", unsafe_allow_html=True)
+    photo_source = st.camera_input("", label_visibility="collapsed")
 
     if photo_source:
         img = np.array(Image.open(photo_source))

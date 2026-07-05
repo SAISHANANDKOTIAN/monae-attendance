@@ -15,6 +15,14 @@ def style_background_home():
                     border-radius: 5rem !important;
                 }
 
+                /* .stApp div[data-testid="stColumn"]h2{ 
+                font-family: 'Climate Crisis', sans-serif !important;
+                font-size: 2rem !important;
+                line-height:0.9 !important;
+                margin-bottom:0rem !important;
+                color: #000000 !important;*/
+                }
+
         </style>
                 """
             ,unsafe_allow_html=True)
@@ -50,6 +58,23 @@ def style_base_layout():
                 padding-top:1.5rem !important;
             }
 
+            /* Selectbox background */
+            div[data-baseweb="select"] > div {
+                background-color: white !important;
+                color: black !important;
+                border: 1px solid #ccc !important;
+            }
+
+            /* Selected text */
+            div[data-baseweb="select"] span {
+                color: black !important;
+            }
+
+            /* Dropdown arrow */
+            div[data-baseweb="select"] svg {
+                fill: black !important;
+            }
+
             h1 {
                 font-family: 'Climate Crisis', sans-serif !important;
                 font-size: 3.5rem !important;
@@ -74,7 +99,7 @@ def style_base_layout():
                 color: white !important;
                 border: none !important;
                 transition: transform 0.25s ease-in-out !important;
-            }
+                }
 
             button[kind="secondary"]{
                 border-radius: 1.5rem !important;

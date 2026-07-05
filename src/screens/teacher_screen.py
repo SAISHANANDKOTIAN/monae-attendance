@@ -23,8 +23,6 @@ from src.database.config import supabase
 from src.components.dialog_voice_attendance import voice_attendance_dialog
 
 def teacher_screen():
-    if st.button("Refresh"):
-        st.rerun()
 
     style_background_dashboard()
     style_base_layout()
@@ -44,7 +42,10 @@ def teacher_dashboard():
     with c1:
         header_dashboard()
     with c2:
-        st.subheader(f"""Welcome, {teacher_data["name"]}""")
+        st.markdown(
+            f"<h3 style='color:black;'>Welcome, {teacher_data['name']}</h3>",
+            unsafe_allow_html=True
+        )
         if st.button("Logout", type='secondary', key='loginbackbtn', shortcut="control+backspace"):
             st.session_state['is_logged_in'] = False
             del st.session_state.teacher_data
@@ -72,6 +73,16 @@ def teacher_dashboard():
             st.session_state.current_teacher_tab = "attendance_records"
             st.rerun()
 
+    # Add this here
+    st.markdown("""
+    <div style="
+        height:2px;
+        background:#A9A9A9;
+        margin:18px 0 25px 0;
+        border-radius:10px;
+    "></div>
+    """, unsafe_allow_html=True)
+
     if st.session_state.current_teacher_tab == 'take_attendance':
         teacher_tab_take_attendance()
     if st.session_state.current_teacher_tab == 'manage_subjects':
@@ -82,7 +93,10 @@ def teacher_dashboard():
 
 def teacher_tab_take_attendance():
     teacher_id = st.session_state.teacher_data['teacher_id']
-    st.header('Take AI Attendance')
+    st.markdown(
+        "<h2 style='color:#2d3044; margin-top:-30px'>Take AI Attendance</h2>",
+        unsafe_allow_html=True
+    )
 
 
     if 'attendance_images' not in st.session_state:
@@ -99,7 +113,8 @@ def teacher_tab_take_attendance():
     col1, col2 = st.columns([3,1], vertical_alignment='bottom')
 
     with col1:
-        selected_subject_label = st.selectbox('Select Subject', options=list(subject_options.keys()))
+        st.markdown("<p style='color:black; margin-bottom:4px;'>Select Subject</p>", unsafe_allow_html=True)
+        selected_subject_label = st.selectbox("", options=list(subject_options.keys()), label_visibility="collapsed")
 
     with col2:
         if st.button('Add Photos', type='primary', icon=':material/photo_prints:', width='stretch'):
@@ -107,10 +122,11 @@ def teacher_tab_take_attendance():
 
     selected_subject_id = subject_options[selected_subject_label]
 
-    st.divider()
+    st.space()
+    st.markdown("""<div style="height:2px; background:#A9A9A9; margin:18px 0 25px 0; border-radius:10px;"></div>""", unsafe_allow_html=True)
 
     if st.session_state.attendance_images:
-        st.header('Added Photos')
+        st.markdown("<h2 style='color:black;'>Added Photos</h2>", unsafe_allow_html=True)
         gallery_cols = st.columns(4)
 
         for idx, img in enumerate(st.session_state.attendance_images):
@@ -189,10 +205,15 @@ def teacher_tab_manage_subjects():
     teacher_id = st.session_state.teacher_data['teacher_id']
     col1, col2 = st.columns(2)
     with col1:
-        st.header('Manage Subjects', width='stretch')
+        st.markdown(
+            "<h2 style='color:#2d3044;margin-top:-30px'>Manage Subjects</h2>",
+            unsafe_allow_html=True
+        )
     with col2:
         if st.button('Create new Subject', width='stretch'):
             create_subject_dialog(teacher_id)
+
+    st.space()
 
     #LIST ALL SUBJECTS
     subjects = get_teacher_subjects(teacher_id)
@@ -202,23 +223,28 @@ def teacher_tab_manage_subjects():
                 ("🫂", "Students", sub['total_students']),
                 ("🕰️", "Classes", sub["total_classes"])
             ]
-        def share_btn():
-            if st.button(f"Share code: {sub['name']}", key=f"share_{sub['subject_code']}", icon=":material/share:"):
-                share_subject_dialog(sub['name'], sub['subject_code'])
-            st.space()
+            def share_btn():
+                if st.button(f"Share code: {sub['name']}", key=f"share_{sub['subject_code']}", icon=":material/share:"):
+                    share_subject_dialog(sub['name'], sub['subject_code'])
+                st.space()
 
-        subject_card(
-            name = sub['name'],
-            code = sub['subject_code'],
-            section = sub['section'],
-            stats = stats,
-            footer_callback = share_btn
-        )
+            subject_card(
+                name = sub['name'],
+                code = sub['subject_code'],
+                section = sub['section'],
+                stats = stats,
+                footer_callback = share_btn
+            )
     else:
         st.info("NO SUBJECTS FOUND. CREATE ONE ABOVE")
 
 def teacher_tab_attendance_records():
-    st.header('Attendance Records')
+    st.markdown(
+        "<h2 style='color:#2d3044;margin-top:-30px'>Attendance Records</h2>",
+        unsafe_allow_html=True
+    )
+
+    st.space()
 
     teacher_id = st.session_state.teacher_data['teacher_id']
 
@@ -288,13 +314,34 @@ def teacher_screen_login():
             st.session_state['login_type'] = None
             st.rerun()
 
-    st.header('Login using password', text_alignment='center')
+    st.markdown(
+        """
+        <h2 style="text-align:center; color:black;">
+            Login using password
+        </h2>
+        """,
+        unsafe_allow_html=True
+    )
 
     st.space()
     st.space()
     
-    teacher_username = st.text_input("Enter username", placeholder='Jhanvi')
-    teacher_pass = st.text_input("Enter password", type='password', placeholder='Enter your Password')
+    st.markdown("<p style='color:black; margin-bottom:4px;'>Enter username</p>", unsafe_allow_html=True)
+    teacher_username = st.text_input(
+        "",
+        placeholder="Enter your username",
+        label_visibility="collapsed",
+        key="login_teacher_username"
+    )
+
+    st.markdown("<p style='color:black; margin-bottom:4px;'>Enter password</p>", unsafe_allow_html=True)
+    teacher_pass = st.text_input(
+        "",
+        type="password",
+        placeholder="Enter your Password",
+        label_visibility="collapsed",
+        key="login_teacher_password"
+    )
     st.divider()
     
     btnc1, btnc2 = st.columns(2)
@@ -338,15 +385,25 @@ def teacher_screen_register():
             st.session_state['login_type'] = None
             st.rerun()
 
-    st.header('Register your Teacher Profile')
+    st.markdown(
+        "<h2 style='color:black;'>Register your Teacher Profile</h2>",
+        unsafe_allow_html=True
+    )
 
     st.space()
     st.space()
 
-    teacher_username = st.text_input("Enter username", placeholder='Jhanvishetty')
-    teacher_name = st.text_input("Enter name", placeholder='Jhanvi Shetty')
-    teacher_pass = st.text_input("Enter password", type='password', placeholder='Enter Password')
-    teacher_pass_confirm = st.text_input("Confirm your password", type='password', placeholder='Enter Password')
+    st.markdown("<p style='color:black; margin-bottom:4px;'>Enter username</p>", unsafe_allow_html=True)
+    teacher_username = st.text_input("Uswrname", placeholder="Enter a username", label_visibility="collapsed")
+
+    st.markdown("<p style='color:black; margin-bottom:4px;'>Enter name</p>", unsafe_allow_html=True)
+    teacher_name = st.text_input("Name", placeholder="Enter your name", label_visibility="collapsed")
+
+    st.markdown("<p style='color:black; margin-bottom:4px;'>Enter password</p>", unsafe_allow_html=True)
+    teacher_pass = st.text_input("Pass", type="password", placeholder="Enter Password", label_visibility="collapsed")
+
+    st.markdown("<p style='color:black; margin-bottom:4px;'>Confirm your password</p>", unsafe_allow_html=True)
+    teacher_pass_confirm = st.text_input("Confirmpass", type="password", placeholder="Enter Password", label_visibility="collapsed")
     st.divider()
     
     btnc1, btnc2 = st.columns(2)

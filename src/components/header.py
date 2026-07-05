@@ -20,7 +20,7 @@ def header_dashboard():
 
     st.markdown(f"""
         <div style="display:flex; align-items:center; justify-content:center; gap:10px">
-            <img src="data:image/png;base64,{logo}" style="height:85px; border-radius:25%" alt="MONAE Logo">
-            <h2 style='text-align:left; color:#5865F2'>MONAE</h1>
+            <img src="data:image/png;base64,{logo}" style="height:85px; border-radius:25%"; alt="MONAE Logo">
+            <h2 style='text-align:left; margin-top:20px; color:#5865F2'>MONAE</h1>
         </div>
                 """, unsafe_allow_html=True)
